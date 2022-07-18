@@ -1,0 +1,118 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "echo",
+            "type": "shell",
+            "command": "echo ${fileBasename}.${fileBasenameNoExtension}"
+        },
+        {
+            "label" : "(sys) create header",
+            "type" :"shell",
+            "command" : "Copy-Item",
+            "args" : [
+                "-Path",
+                "${workspaceFolder}\\include\\templates.h",
+                "-Destination",
+                "${workspaceFolder}\\include\\${fileBasenameNoExtension}.h",
+                "-confirm"
+            ]
+        },
+        {
+            "label" : "(sys) create test file",
+            "type" :"shell",
+            "command" : "Copy-Item",
+            "args" : [
+                "-Path",
+                "${workspaceFolder}\\test\\templates.c",
+                "-Destination",
+                "${workspaceFolder}\\test\\${fileBasenameNoExtension}.c",
+                "-confirm"
+            ]
+        },
+        {
+            "label" : "(ini) create test and header",
+            "type"  : "shell",
+            "dependsOn" : [
+                "(sys) create header",
+                "(sys) create test file"
+            ]
+        },
+        {
+            "label": "(sys) build main",
+            "type": "cppbuild",
+            "command": "C:\\Program Files\\mingw64\\bin\\gcc.exe",
+            "args": [
+                "${workspaceFolder}\\src\\main.c",
+                "${workspaceFolder}\\src\\libs\\*.c", 
+                "-o", "${workspaceFolder}\\release\\main.exe",
+                "-I", "${workspaceFolder}\\include"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "(sys) build unit test",
+            "type": "cppbuild",
+            "command": "C:\\Program Files\\mingw64\\bin\\gcc.exe",
+            "args" : [
+                "${workspaceFolder}\\test\\${fileBasenameNoExtension}.c", 
+                "${workspaceFolder}\\src\\libs\\${fileBasenameNoExtension}.c", 
+                "-o", "${workspaceFolder}\\test\\test_exefiles\\UT_${fileBasenameNoExtension}.exe",
+                "-I", "${workspaceFolder}\\include"],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+        },
+        {
+            "label": "(exe) exec unit test",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}\\test\\test_exefiles ; .\\UT_${fileBasenameNoExtension}.exe",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared",
+                "clear": true,
+            },
+            "dependsOn": "(sys) build unit test"
+        },
+        {
+            "label": "(sys) build joint test",
+            "type" : "cppbuild",
+            "command": "C:\\Program Files\\mingw64\\bin\\gcc.exe",
+            "args" : [
+                "${workspaceFolder}\\test\\${fileBasenameNoExtension}.c", 
+                "${workspaceFolder}\\src\\libs\\*.c", 
+                "-o", "${workspaceFolder}\\test\\test_exefiles\\${fileBasenameNoExtension}.exe",
+                "-I", "${workspaceFolder}\\include"],
+            "group": {
+                    "kind": "test",
+                    "isDefault": false
+                }
+        },
+        {
+            "label": "(exe) exec joint test",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}\\test\\test_exefiles ; .\\${fileBasenameNoExtension}.exe",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared",
+                "clear": false,
+            },
+            "dependsOn": "(sys) build joint test"
+        },
+    ]
+
+}

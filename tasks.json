@@ -62,7 +62,7 @@
             "args" : [
                 "${workspaceFolder}\\test\\${fileBasenameNoExtension}.c", 
                 "${workspaceFolder}\\src\\libs\\${fileBasenameNoExtension}.c", 
-                "-o", "${workspaceFolder}\\test\\test_exefiles\\UT_${fileBasenameNoExtension}.exe",
+                "-o", "${workspaceFolder}\\debug\\UT_${fileBasenameNoExtension}.exe",
                 "-I", "${workspaceFolder}\\include"],
             "group": {
                 "kind": "test",
@@ -72,7 +72,7 @@
         {
             "label": "(exe) exec unit test",
             "type": "shell",
-            "command": "cd ${workspaceFolder}\\test\\test_exefiles ; .\\UT_${fileBasenameNoExtension}.exe",
+            "command": "cd ${workspaceFolder}\\debug ; .\\UT_${fileBasenameNoExtension}.exe",
             "group": {
                 "kind": "test",
                 "isDefault": true
@@ -91,7 +91,7 @@
             "args" : [
                 "${workspaceFolder}\\test\\${fileBasenameNoExtension}.c", 
                 "${workspaceFolder}\\src\\libs\\*.c", 
-                "-o", "${workspaceFolder}\\test\\test_exefiles\\${fileBasenameNoExtension}.exe",
+                "-o", "${workspaceFolder}\\debug\\${fileBasenameNoExtension}.exe",
                 "-I", "${workspaceFolder}\\include"],
             "group": {
                     "kind": "test",
@@ -101,7 +101,7 @@
         {
             "label": "(exe) exec joint test",
             "type": "shell",
-            "command": "cd ${workspaceFolder}\\test\\test_exefiles ; .\\${fileBasenameNoExtension}.exe",
+            "command": "cd ${workspaceFolder}\\debug ; .\\${fileBasenameNoExtension}.exe",
             "group": {
                 "kind": "test",
                 "isDefault": true
